@@ -9,12 +9,52 @@ class DieRoll {
     public:
         DieRoll(string input) {
             diceVector = {};
-            diceVector.push_back([](){return rand() % 2;});
-            diceVector.push_back([](){return rand() % 2;});
-            diceVector.push_back([](){return 1;});
 
-            addDieToProbabilityMap(2);
-            addDieToProbabilityMap(2);
+            int dieNumber = INT_MIN;
+            int dieSize = INT_MIN;
+            bool dieNumberChosen = false;
+
+            for (int inputIndex = 0; inputIndex < input.size(); ++inputIndex) {
+                char character = input[inputIndex];
+                bool characterIsNum = isdigit(static_cast<unsigned char>(character));
+
+                if (characterIsNum) {
+                    if (!dieNumberChosen) {
+                        // add the character to dieNumber
+                        dieNumber *= 10;
+                        dieNumber += character - '0';
+                    }
+                    else {
+                        // add the character to dieSize
+                        dieSize *= 10;
+                        dieSize += character - '0';
+                    }
+                }
+
+                // if we ended defining the die number
+                else if (character == 'd') {
+                    if (dieNumber == INT_MIN) dieNumber = 1;
+                    dieNumberChosen = true;
+                }
+
+                // if we ended defining a die
+                if ((!characterIsNum || inputIndex + 1 == input.size()) && dieSize > 0) {
+                    for (int i = 0; i < dieNumber; ++i) {
+                        diceVector.push_back([dieSize](){return (rand() % dieSize) + 1;});
+                        addDieToProbabilityMap(dieSize);
+                    }
+
+                    dieNumber = INT_MIN;
+                    dieSize = INT_MIN;
+                    dieNumberChosen = false;
+                }
+            }
+
+            // diceVector.push_back([](){return (rand() % 2) + 1;});
+            // diceVector.push_back([](){return (rand() % 2) + 1;});
+
+            // addDieToProbabilityMap(2);
+            // addDieToProbabilityMap(2);
         }
 
         int roll() {
@@ -82,7 +122,9 @@ int main() {
     srand(time(NULL));
 
     // cout << (rand() % 100);
-    DieRoll testDieRoll("input string");
+    string input;
+    cin >> input;
+    DieRoll testDieRoll(input);
 
     cout << "Die Rolls" << "\n";
     map<int, int> dieRollMap = {};
