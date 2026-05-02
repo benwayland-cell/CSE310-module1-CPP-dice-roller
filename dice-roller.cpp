@@ -13,7 +13,7 @@ class DieRoll {
             diceVector.push_back([](){return rand() % 2;});
             diceVector.push_back([](){return 1;});
 
-            probabilityMap = {{1, 1}, {2, 1}};
+            addDieToProbabilityMap(2);
             addDieToProbabilityMap(2);
         }
 
@@ -55,6 +55,14 @@ class DieRoll {
 
         void addDieToProbabilityMap(int dieSize) {
             map<int, int> newProbMap = {}; // we are going to set probabilityMap to this afterwards
+
+            // Edge case: there is currently nothing in the probability map
+            if (probabilityMap.size() == 0) {
+                for (int currentNum = 1; currentNum <= dieSize; ++currentNum) {
+                    probabilityMap[currentNum] = 1;
+                }
+                return;
+            }
 
             vector<int> probMapKeys = getProbabilityMapKeys();
 
