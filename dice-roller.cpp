@@ -2,6 +2,7 @@
 #include <functional>
 #include <vector>
 #include <map>
+#include <string>
 using namespace std;
 
 
@@ -79,8 +80,8 @@ class DieRoll {
             cout << "Current Probability Map" << "\n";
             for (int keyIndex = 0; keyIndex < probMapKeys.size(); ++keyIndex) {
                 int probMapKey = probMapKeys[keyIndex];
-                float percentage = (float)probabilityMap[probMapKey] / totalPossibilities * 100.0;
-                cout << probMapKey << ": " << percentage << "%\n";
+                string roundPercent = getRoundPercent(probabilityMap[probMapKey], totalPossibilities);
+                cout << probMapKey << (": " + roundPercent + "\n");
             }
         }
 
@@ -123,6 +124,19 @@ class DieRoll {
             }
 
             probabilityMap = newProbMap;
+        }
+
+        string getRoundPercent(int numberGiven, int total) {
+            float percentage = (float)numberGiven / total * 100.0; // Get the percentage
+            int percentageRounded = (int)percentage; // Round it
+
+            // Check if we need to round up
+            float decimal = percentage - percentageRounded;
+            if (decimal >= 0.5) {
+                ++percentageRounded;
+            }
+
+            return (to_string(percentageRounded) + "%");
         }
 };
 
