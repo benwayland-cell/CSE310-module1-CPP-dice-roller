@@ -14,6 +14,7 @@ class DieRoll {
             int dieSize = INT_MIN;
             bool dieNumberChosen = false;
 
+            // loop through every character
             for (int inputIndex = 0; inputIndex < input.size(); ++inputIndex) {
                 char character = input[inputIndex];
                 bool characterIsNum = isdigit(static_cast<unsigned char>(character));
@@ -66,12 +67,20 @@ class DieRoll {
         }
 
         void printProbabilityMap() {
-            cout << "Current Probability Map" << "\n";
-
+            
             vector<int> probMapKeys = getProbabilityMapKeys();
+            
+            // Get the number of possibilities
+            int totalPossibilities = 0;
+            for (int keyIndex = 0; keyIndex < probMapKeys.size(); ++keyIndex) {
+                totalPossibilities += probabilityMap[probMapKeys[keyIndex]];
+            }
+            
+            cout << "Current Probability Map" << "\n";
             for (int keyIndex = 0; keyIndex < probMapKeys.size(); ++keyIndex) {
                 int probMapKey = probMapKeys[keyIndex];
-                cout << probMapKey << ": " << probabilityMap[probMapKey] << "\n";
+                float percentage = (float)probabilityMap[probMapKey] / totalPossibilities * 100.0;
+                cout << probMapKey << ": " << percentage << "%\n";
             }
         }
 
