@@ -5,16 +5,16 @@
 #include <string>
 
 #include "die-roll.h"
+#include "die.h"
 
 using namespace std;
 
 int main() {
     srand(time(NULL));
 
-    // cout << (rand() % 100);
+    cout << "Roll: ";
     string input;
     getline(cin, input);
-    cout << "Input: " << input << "\n";
     DieRoll testDieRoll(input);
 
     cout << "Die Rolls" << "\n";

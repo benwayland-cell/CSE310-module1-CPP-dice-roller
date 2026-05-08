@@ -1,10 +1,12 @@
+#pragma once
 #include <iostream>
 #include <functional>
 #include <vector>
 #include <map>
 #include <string>
+
+#include "die.h"
 using namespace std;
-#pragma once
 
 class DieRoll 
 {
@@ -14,7 +16,7 @@ class DieRoll
         void printProbabilityMap();
     
     private:
-        vector<function<int()>> diceVector = {};
+        vector<Die> diceVector = {};
         map<int, int> probabilityMap = {};
 
         vector<int> getProbabilityMapKeys();

@@ -5,6 +5,7 @@
 #include <string>
 
 #include "die-roll.h"
+#include "die.h"
 using namespace std;
 
 
@@ -12,8 +13,6 @@ DieRoll::DieRoll(string input) {
     int dieNumber = INT_MIN;
     int dieSize = INT_MIN;
     bool dieNumberChosen = false;
-
-    cout << "Building Die: ";
 
     // loop through every character
     for (int inputIndex = 0; inputIndex < input.size(); ++inputIndex) {
@@ -42,24 +41,21 @@ DieRoll::DieRoll(string input) {
         // if we ended defining a die
         if ((!characterIsNum || inputIndex + 1 == input.size()) && dieSize > 0) {
             for (int i = 0; i < dieNumber; ++i) {
-                DieRoll::diceVector.push_back([dieSize](){return (rand() % dieSize) + 1;});
-                addDieToProbabilityMap(dieSize);
+                DieRoll::diceVector.push_back(Die(dieNumber, dieSize));
+                DieRoll::addDieToProbabilityMap(dieSize);
             }
             
-            cout << dieNumber << "d" << dieSize << " ";
             dieNumber = INT_MIN;
             dieSize = INT_MIN;
             dieNumberChosen = false;
         }
     }
-
-    cout << "\n";
 }
 
 int DieRoll::roll() {
     int sum = 0;
     for (int index = 0; index < diceVector.size(); ++index) {
-        sum += diceVector[index]();
+        sum += diceVector[index].roll();
     }
     return sum;
 }
@@ -88,7 +84,7 @@ vector<int> DieRoll::getProbabilityMapKeys() {
     // Vector to store the keys
     vector<int> keys;
     // Extract keys using a loop
-    for (auto it = probabilityMap.begin(); it != probabilityMap.end(); ++it)
+    for (auto it = DieRoll::probabilityMap.begin(); it != DieRoll::probabilityMap.end(); ++it)
     {
         // Add the key to the vector
         keys.push_back(it->first);
@@ -100,7 +96,7 @@ void DieRoll::addDieToProbabilityMap(int dieSize) {
     map<int, int> newProbMap = {}; // we are going to set probabilityMap to this afterwards
 
     // Edge case: there is currently nothing in the probability map
-    if (probabilityMap.size() == 0) {
+    if (DieRoll::probabilityMap.size() == 0) {
         for (int currentNum = 1; currentNum <= dieSize; ++currentNum) {
             probabilityMap[currentNum] = 1;
         }
@@ -116,7 +112,7 @@ void DieRoll::addDieToProbabilityMap(int dieSize) {
         }
     }
 
-    probabilityMap = newProbMap;
+    DieRoll::probabilityMap = newProbMap;
 }
 
 string DieRoll::getRoundPercent(int numberGiven, int total) {
