@@ -14,7 +14,6 @@ Instructions for using the software:
 
 1. The program will prompt you for input through the terminal
 2. Respond using dice notation (ex. 2d6 is two six-sided dice)
-3.
 
 ## Development Environment
 
